@@ -4,6 +4,7 @@ import {
   createGuest,
   updateGuest,
   deleteGuest,
+  uploadGuestExcel,
 } from "../api/guestApi";
 import GuestForm from "../components/GuestForm";
 import {
@@ -19,12 +20,15 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  Box,
 } from "@mui/material";
 
 export default function GuestManagement() {
   const [guests, setGuests] = useState([]);
   const [editingGuest, setEditingGuest] = useState(null);
   const [showForm, setShowForm] = useState(false);
+  const [showUploadModal, setShowUploadModal] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const fetchGuests = async () => {
     const res = await getGuests();
@@ -47,6 +51,7 @@ export default function GuestManagement() {
       fetchGuests();
     }
   };
+
   const handleOpenModal = (guest = null) => {
     setEditingGuest(guest);
     setShowForm(true);
@@ -55,6 +60,51 @@ export default function GuestManagement() {
   const handleCloseModal = () => {
     setShowForm(false);
     setEditingGuest(null);
+  };
+
+  const handleUploadExcel = async () => {
+    if (!selectedFile) return;
+
+    try {
+      await uploadGuestExcel(selectedFile); // ← use centralized API
+      fetchGuests();
+      setShowUploadModal(false);
+      setSelectedFile(null);
+    } catch (error) {
+      alert("Upload failed");
+      console.error(error);
+    }
+  };
+
+  const generateInvitationMessage = (guest) => {
+    return `Assalamu'alaikum Wr. Wb
+
+    Yth. ${guest.guest_name}
+
+    Tanpa mengurangi rasa hormat, perkenankan kami mengundang Bapak/Ibu/Saudara/i, teman sekaligus sahabat, untuk menghadiri acara kami :
+
+    ${guest.invitation_link}
+
+    Merupakan suatu kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan untuk hadir dan memberikan doa restu.
+
+    Mohon maaf perihal undangan hanya di bagikan melalui pesan ini. Terima kasih banyak atas perhatiannya.
+
+    Link Map:
+    https://maps.app.goo.gl/1Dp2T1z38gyVYK5LA
+
+    Wassalamu'alaikum Wr. Wb.
+    Terima Kasih.`;
+  };
+
+  const copyInvitation = async (guest) => {
+    const message = generateInvitationMessage(guest);
+    try {
+      await navigator.clipboard.writeText(message);
+      alert("Invitation message copied to clipboard!");
+    } catch (err) {
+      alert("Failed to copy!");
+      console.error(err);
+    }
   };
 
   useEffect(() => {
@@ -66,10 +116,17 @@ export default function GuestManagement() {
       <Typography variant="h4" sx={{ mb: 2 }}>
         Guest Management
       </Typography>
-      <Button variant="contained" onClick={() => handleOpenModal()}>
-        Add Guest
-      </Button>
 
+      <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
+        <Button variant="contained" onClick={() => handleOpenModal()}>
+          Add Guest
+        </Button>
+        <Button variant="outlined" onClick={() => setShowUploadModal(true)}>
+          Upload Excel
+        </Button>
+      </Box>
+
+      {/* Modal for Add/Edit Guest */}
       <Dialog
         open={showForm}
         onClose={handleCloseModal}
@@ -86,6 +143,30 @@ export default function GuestManagement() {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseModal}>Close</Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Modal for Upload Excel */}
+      <Dialog
+        open={showUploadModal}
+        onClose={() => setShowUploadModal(false)}
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle>Upload Excel File</DialogTitle>
+        <DialogContent>
+          <input
+            type="file"
+            accept=".xlsx"
+            onChange={(e) => setSelectedFile(e.target.files[0])}
+            style={{ marginTop: "1rem" }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setShowUploadModal(false)}>Cancel</Button>
+          <Button onClick={handleUploadExcel} variant="contained">
+            Upload
+          </Button>
         </DialogActions>
       </Dialog>
 
@@ -115,6 +196,14 @@ export default function GuestManagement() {
                 >
                   {guest.invitation_link}
                 </a>
+                <br />
+                <Button
+                  size="small"
+                  onClick={() => copyInvitation(guest)}
+                  sx={{ mt: 1 }}
+                >
+                  Copy Message
+                </Button>
               </TableCell>
               <TableCell>
                 <Button onClick={() => handleOpenModal(guest)}>Edit</Button>
