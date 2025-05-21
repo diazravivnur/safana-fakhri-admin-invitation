@@ -15,6 +15,10 @@ import {
   TableRow,
   TableCell,
   TableBody,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 
 export default function GuestManagement() {
@@ -33,8 +37,7 @@ export default function GuestManagement() {
     } else {
       await createGuest(form);
     }
-    setShowForm(false);
-    setEditingGuest(null);
+    handleCloseModal();
     fetchGuests();
   };
 
@@ -43,6 +46,15 @@ export default function GuestManagement() {
       await deleteGuest(id);
       fetchGuests();
     }
+  };
+  const handleOpenModal = (guest = null) => {
+    setEditingGuest(guest);
+    setShowForm(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowForm(false);
+    setEditingGuest(null);
   };
 
   useEffect(() => {
@@ -54,20 +66,28 @@ export default function GuestManagement() {
       <Typography variant="h4" sx={{ mb: 2 }}>
         Guest Management
       </Typography>
-      <Button variant="contained" onClick={() => setShowForm(true)}>
+      <Button variant="contained" onClick={() => handleOpenModal()}>
         Add Guest
       </Button>
 
-      {showForm && (
-        <GuestForm
-          initialData={editingGuest}
-          onSave={handleSave}
-          onCancel={() => {
-            setShowForm(false);
-            setEditingGuest(null);
-          }}
-        />
-      )}
+      <Dialog
+        open={showForm}
+        onClose={handleCloseModal}
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle>{editingGuest ? "Edit Guest" : "Add Guest"}</DialogTitle>
+        <DialogContent>
+          <GuestForm
+            initialData={editingGuest}
+            onSave={handleSave}
+            onCancel={handleCloseModal}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseModal}>Close</Button>
+        </DialogActions>
+      </Dialog>
 
       <Table sx={{ mt: 4 }}>
         <TableHead>
@@ -76,6 +96,7 @@ export default function GuestManagement() {
             <TableCell>Group</TableCell>
             <TableCell>Guest Name</TableCell>
             <TableCell>Partner</TableCell>
+            <TableCell>Invitation Link</TableCell>
             <TableCell>Action</TableCell>
           </TableRow>
         </TableHead>
@@ -87,14 +108,16 @@ export default function GuestManagement() {
               <TableCell>{guest.guest_name}</TableCell>
               <TableCell>{guest.partner ? "Yes" : "No"}</TableCell>
               <TableCell>
-                <Button
-                  onClick={() => {
-                    setEditingGuest(guest);
-                    setShowForm(true);
-                  }}
+                <a
+                  href={guest.invitation_link}
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  Edit
-                </Button>
+                  {guest.invitation_link}
+                </a>
+              </TableCell>
+              <TableCell>
+                <Button onClick={() => handleOpenModal(guest)}>Edit</Button>
                 <Button color="error" onClick={() => handleDelete(guest.id)}>
                   Delete
                 </Button>
