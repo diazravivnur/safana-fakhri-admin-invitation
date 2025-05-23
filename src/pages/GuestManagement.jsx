@@ -21,7 +21,10 @@ import {
   DialogContent,
   DialogActions,
   Box,
+  TextField,
+  MenuItem,
 } from "@mui/material";
+import GuestStats from "../components/GuestStats";
 
 export default function GuestManagement() {
   const [guests, setGuests] = useState([]);
@@ -29,6 +32,8 @@ export default function GuestManagement() {
   const [showForm, setShowForm] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [filterName, setFilterName] = useState("");
+  const [filterGroup, setFilterGroup] = useState("");
 
   const fetchGuests = async () => {
     const res = await getGuests();
@@ -106,6 +111,13 @@ export default function GuestManagement() {
       console.error(err);
     }
   };
+  const filteredGuests = guests.filter((guest) => {
+    const matchesName = guest.guest_name
+      .toLowerCase()
+      .includes(filterName.toLowerCase());
+    const matchesGroup = !filterGroup || guest.group_name === filterGroup;
+    return matchesName && matchesGroup;
+  });
 
   useEffect(() => {
     fetchGuests();
@@ -117,6 +129,13 @@ export default function GuestManagement() {
         Guest Management
       </Typography>
 
+      <GuestStats
+        totalInvitees={guests.length}
+        attendedInvitees={guests.filter((g) => g.has_attended).length}
+        totalPax={guests.reduce((sum, g) => sum + (g.total_pax || 0), 0)}
+        attendedPax={guests.reduce((sum, g) => sum + (g.attended_pax || 0), 0)}
+      />
+
       <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
         <Button variant="contained" onClick={() => handleOpenModal()}>
           Add Guest
@@ -124,6 +143,35 @@ export default function GuestManagement() {
         <Button variant="outlined" onClick={() => setShowUploadModal(true)}>
           Upload Excel
         </Button>
+      </Box>
+
+      {/* Filter Section */}
+      <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", mb: 3 }}>
+        <TextField
+          label="Filter by Name"
+          variant="outlined"
+          size="small"
+          value={filterName}
+          onChange={(e) => setFilterName(e.target.value)}
+        />
+        <TextField
+          label="Filter by Group"
+          variant="outlined"
+          size="small"
+          select
+          value={filterGroup}
+          onChange={(e) => setFilterGroup(e.target.value)}
+          sx={{ minWidth: 150 }}
+        >
+          <MenuItem value="">All Groups</MenuItem>
+          {[...new Set(guests.map((g) => g.group_name))]
+            .filter((g) => g)
+            .map((group) => (
+              <MenuItem key={group} value={group}>
+                {group}
+              </MenuItem>
+            ))}
+        </TextField>
       </Box>
 
       {/* Modal for Add/Edit Guest */}
@@ -170,6 +218,7 @@ export default function GuestManagement() {
         </DialogActions>
       </Dialog>
 
+      {/* Guest Table */}
       <Table sx={{ mt: 4 }}>
         <TableHead>
           <TableRow>
@@ -182,7 +231,7 @@ export default function GuestManagement() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {guests.map((guest) => (
+          {filteredGuests.map((guest) => (
             <TableRow key={guest.id}>
               <TableCell>{guest.id}</TableCell>
               <TableCell>{guest.group_name}</TableCell>
