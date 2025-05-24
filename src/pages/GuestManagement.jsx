@@ -5,6 +5,7 @@ import {
   updateGuest,
   deleteGuest,
   uploadGuestExcel,
+  shareInvitation,
 } from "../api/guestApi";
 import GuestForm from "../components/GuestForm";
 import {
@@ -34,10 +35,23 @@ export default function GuestManagement() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [filterName, setFilterName] = useState("");
   const [filterGroup, setFilterGroup] = useState("");
-
+  const [filters, setFilters] = useState({
+    guest_name: "",
+    group_name: "",
+    partner: "",
+    has_shared_invitation: "",
+  });
+  const [filterPartner, setFilterPartner] = useState("");
+  const [filterShared, setFilterShared] = useState("");
   const fetchGuests = async () => {
     const res = await getGuests();
     setGuests(res.data);
+  };
+  const resetFilters = () => {
+    setFilterName("");
+    setFilterGroup("");
+    setFilterPartner("");
+    setFilterShared("");
   };
 
   const handleSave = async (form) => {
@@ -105,18 +119,33 @@ export default function GuestManagement() {
     const message = generateInvitationMessage(guest);
     try {
       await navigator.clipboard.writeText(message);
+      shareInvitation(guest.id);
       alert("Invitation message copied to clipboard!");
+      fetchGuests(); // refresh to reflect has_shared_invitation
     } catch (err) {
       alert("Failed to copy!");
       console.error(err);
     }
   };
+
   const filteredGuests = guests.filter((guest) => {
     const matchesName = guest.guest_name
       .toLowerCase()
       .includes(filterName.toLowerCase());
+
     const matchesGroup = !filterGroup || guest.group_name === filterGroup;
-    return matchesName && matchesGroup;
+
+    const matchesPartner =
+      filterPartner === ""
+        ? true
+        : (guest.partner ?? false) === (filterPartner === "true");
+
+    const matchesShared =
+      filterShared === ""
+        ? true
+        : (guest.has_shared_invitation ?? false) === (filterShared === "true");
+
+    return matchesName && matchesGroup && matchesPartner && matchesShared;
   });
 
   useEffect(() => {
@@ -148,14 +177,15 @@ export default function GuestManagement() {
       {/* Filter Section */}
       <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", mb: 3 }}>
         <TextField
-          label="Filter by Name"
+          label="Name"
           variant="outlined"
           size="small"
           value={filterName}
           onChange={(e) => setFilterName(e.target.value)}
         />
+
         <TextField
-          label="Filter by Group"
+          label="Group"
           variant="outlined"
           size="small"
           select
@@ -163,17 +193,48 @@ export default function GuestManagement() {
           onChange={(e) => setFilterGroup(e.target.value)}
           sx={{ minWidth: 150 }}
         >
-          <MenuItem value="">All Groups</MenuItem>
+          <MenuItem value="">All</MenuItem>
           {[...new Set(guests.map((g) => g.group_name))]
-            .filter((g) => g)
+            .filter(Boolean)
             .map((group) => (
               <MenuItem key={group} value={group}>
                 {group}
               </MenuItem>
             ))}
         </TextField>
-      </Box>
 
+        <TextField
+          label="Partner"
+          variant="outlined"
+          size="small"
+          select
+          value={filterPartner}
+          onChange={(e) => setFilterPartner(e.target.value)}
+          sx={{ minWidth: 130 }}
+        >
+          <MenuItem value="">All</MenuItem>
+          <MenuItem value="true">Yes</MenuItem>
+          <MenuItem value="false">No</MenuItem>
+        </TextField>
+
+        <TextField
+          label="Shared?"
+          variant="outlined"
+          size="small"
+          select
+          value={filterShared}
+          onChange={(e) => setFilterShared(e.target.value)}
+          sx={{ minWidth: 130 }}
+        >
+          <MenuItem value="">All</MenuItem>
+          <MenuItem value="true">Yes</MenuItem>
+          <MenuItem value="false">No</MenuItem>
+        </TextField>
+
+        <Button variant="outlined" color="secondary" onClick={resetFilters}>
+          Reset Filters
+        </Button>
+      </Box>
       {/* Modal for Add/Edit Guest */}
       <Dialog
         open={showForm}
@@ -228,6 +289,7 @@ export default function GuestManagement() {
             <TableCell>Partner</TableCell>
             <TableCell>Invitation Link</TableCell>
             <TableCell>Action</TableCell>
+            <TableCell>Shared?</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -259,6 +321,9 @@ export default function GuestManagement() {
                 <Button color="error" onClick={() => handleDelete(guest.id)}>
                   Delete
                 </Button>
+              </TableCell>
+              <TableCell>
+                {guest.has_shared_invitation ? "Yes" : "No"}
               </TableCell>
             </TableRow>
           ))}
