@@ -6,6 +6,8 @@ import {
   deleteGuest,
   uploadGuestExcel,
   shareInvitation,
+  uploadGroupImage,
+  shareGroupLink,
 } from "../api/guestApi";
 import GuestForm from "../components/GuestForm";
 import {
@@ -24,6 +26,9 @@ import {
   Box,
   TextField,
   MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 import GuestStats from "../components/GuestStats";
 
@@ -38,11 +43,11 @@ export default function GuestManagement() {
   const [filters, setFilters] = useState({
     guest_name: "",
     group_name: "",
-    partner: "",
     has_shared_invitation: "",
   });
-  const [filterPartner, setFilterPartner] = useState("");
   const [filterShared, setFilterShared] = useState("");
+  const [origin, setOrigin] = useState("");
+
   const fetchGuests = async () => {
     const res = await getGuests();
     setGuests(res.data);
@@ -50,7 +55,6 @@ export default function GuestManagement() {
   const resetFilters = () => {
     setFilterName("");
     setFilterGroup("");
-    setFilterPartner("");
     setFilterShared("");
   };
 
@@ -82,10 +86,13 @@ export default function GuestManagement() {
   };
 
   const handleUploadExcel = async () => {
-    if (!selectedFile) return;
+    if (!selectedFile || !origin) {
+      alert("Pilih file dan asal undangan terlebih dahulu");
+      return;
+    }
 
     try {
-      await uploadGuestExcel(selectedFile); // ← use centralized API
+      await uploadGuestExcel(selectedFile, origin); // ← use centralized API
       fetchGuests();
       setShowUploadModal(false);
       setSelectedFile(null);
@@ -95,10 +102,43 @@ export default function GuestManagement() {
     }
   };
 
+  const handleCopyGroupLink = async (groupName) => {
+    const link = generateGroupLink(groupName);
+    try {
+      await navigator.clipboard.writeText(link);
+      await shareGroupLink(groupName); // calls separated API logic
+      alert("Group link copied & marked as shared!");
+      // Optionally refresh data or update state here
+    } catch (error) {
+      console.log(error);
+      alert("Failed to copy or share group link.");
+    }
+  };
+
   const generateInvitationMessage = (guest) => {
     return `Assalamu'alaikum Wr. Wb
 
     Yth. ${guest.guest_name}
+
+    Tanpa mengurangi rasa hormat, perkenankan kami mengundang Bapak/Ibu/Saudara/i, teman sekaligus sahabat, untuk menghadiri acara kami :
+
+    ${guest.invitation_link}
+
+    Merupakan suatu kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan untuk hadir dan memberikan doa restu.
+
+    Mohon maaf perihal undangan hanya di bagikan melalui pesan ini. Terima kasih banyak atas perhatiannya.
+
+    Link Map:
+    https://maps.app.goo.gl/1Dp2T1z38gyVYK5LA
+
+    Wassalamu'alaikum Wr. Wb.
+    Terima Kasih.`;
+  };
+
+  const generateInvitationGroupMessage = (groupName) => {
+    return `Assalamu'alaikum Wr. Wb
+
+    Yth. ${groupName}
 
     Tanpa mengurangi rasa hormat, perkenankan kami mengundang Bapak/Ibu/Saudara/i, teman sekaligus sahabat, untuk menghadiri acara kami :
 
@@ -128,6 +168,20 @@ export default function GuestManagement() {
     }
   };
 
+  const copyGroupInvitation = async (groupName) => {
+    console.log(123, groupName);
+    const message = generateInvitationMessage(groupName);
+    try {
+      await navigator.clipboard.writeText(message);
+      shareGroupLink(groupName);
+      alert("Invitation message copied to clipboard!");
+      fetchGuests(); // refresh to reflect has_shared_invitation
+    } catch (err) {
+      alert("Failed to copy!");
+      console.error(err);
+    }
+  };
+
   const filteredGuests = guests.filter((guest) => {
     const matchesName = guest.guest_name
       .toLowerCase()
@@ -135,17 +189,17 @@ export default function GuestManagement() {
 
     const matchesGroup = !filterGroup || guest.group_name === filterGroup;
 
-    const matchesPartner =
-      filterPartner === ""
-        ? true
-        : (guest.partner ?? false) === (filterPartner === "true");
-
     const matchesShared =
       filterShared === ""
         ? true
         : (guest.has_shared_invitation ?? false) === (filterShared === "true");
 
-    return matchesName && matchesGroup && matchesPartner && matchesShared;
+    const matchesOrigin =
+      origin === ""
+        ? true
+        : guest.origin?.toLowerCase() === origin.toLowerCase();
+
+    return matchesName && matchesGroup && matchesShared && matchesOrigin;
   });
 
   useEffect(() => {
@@ -159,7 +213,7 @@ export default function GuestManagement() {
       </Typography>
 
       <GuestStats
-        totalInvitees={guests.length}
+        totalInvitees={guests.reduce((sum, g) => sum + (g.pax_count || 0), 0)}
         attendedInvitees={guests.filter((g) => g.has_attended).length}
         totalPax={guests.reduce((sum, g) => sum + (g.total_pax || 0), 0)}
         attendedPax={guests.reduce((sum, g) => sum + (g.attended_pax || 0), 0)}
@@ -176,6 +230,19 @@ export default function GuestManagement() {
 
       {/* Filter Section */}
       <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", mb: 3 }}>
+        <TextField
+          label="Origin"
+          variant="outlined"
+          size="small"
+          select
+          value={origin}
+          onChange={(e) => setOrigin(e.target.value)}
+          sx={{ minWidth: 130 }}
+        >
+          <MenuItem value="">All</MenuItem>
+          <MenuItem value="diaz">Diaz</MenuItem>
+          <MenuItem value="wulan">Wulan</MenuItem>
+        </TextField>
         <TextField
           label="Name"
           variant="outlined"
@@ -201,20 +268,6 @@ export default function GuestManagement() {
                 {group}
               </MenuItem>
             ))}
-        </TextField>
-
-        <TextField
-          label="Partner"
-          variant="outlined"
-          size="small"
-          select
-          value={filterPartner}
-          onChange={(e) => setFilterPartner(e.target.value)}
-          sx={{ minWidth: 130 }}
-        >
-          <MenuItem value="">All</MenuItem>
-          <MenuItem value="true">Yes</MenuItem>
-          <MenuItem value="false">No</MenuItem>
         </TextField>
 
         <TextField
@@ -264,11 +317,23 @@ export default function GuestManagement() {
       >
         <DialogTitle>Upload Excel File</DialogTitle>
         <DialogContent>
+          <FormControl fullWidth sx={{ mt: 2 }}>
+            <InputLabel>Asal Undangan</InputLabel>
+            <Select
+              value={origin}
+              label="Asal Undangan"
+              onChange={(e) => setOrigin(e.target.value)}
+            >
+              <MenuItem value="diaz">Diaz</MenuItem>
+              <MenuItem value="wulan">Wulan</MenuItem>
+            </Select>
+          </FormControl>
+
           <input
             type="file"
             accept=".xlsx"
             onChange={(e) => setSelectedFile(e.target.files[0])}
-            style={{ marginTop: "1rem" }}
+            style={{ marginTop: "1.5rem" }}
           />
         </DialogContent>
         <DialogActions>
@@ -283,50 +348,156 @@ export default function GuestManagement() {
       <Table sx={{ mt: 4 }}>
         <TableHead>
           <TableRow>
-            <TableCell>ID</TableCell>
+            <TableCell>No.</TableCell>
             <TableCell>Group</TableCell>
+            <TableCell>Group Image</TableCell>
             <TableCell>Guest Name</TableCell>
-            <TableCell>Partner</TableCell>
+            {/* <TableCell>QR</TableCell> */}
+            <TableCell>Pax</TableCell>
             <TableCell>Invitation Link</TableCell>
             <TableCell>Action</TableCell>
             <TableCell>Shared?</TableCell>
+            <TableCell>isAttending?</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {filteredGuests.map((guest) => (
-            <TableRow key={guest.id}>
-              <TableCell>{guest.id}</TableCell>
-              <TableCell>{guest.group_name}</TableCell>
-              <TableCell>{guest.guest_name}</TableCell>
-              <TableCell>{guest.partner ? "Yes" : "No"}</TableCell>
-              <TableCell>
-                <a
-                  href={guest.invitation_link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {guest.invitation_link}
-                </a>
-                <br />
-                <Button
-                  size="small"
-                  onClick={() => copyInvitation(guest)}
-                  sx={{ mt: 1 }}
-                >
-                  Copy Message
-                </Button>
-              </TableCell>
-              <TableCell>
-                <Button onClick={() => handleOpenModal(guest)}>Edit</Button>
-                <Button color="error" onClick={() => handleDelete(guest.id)}>
-                  Delete
-                </Button>
-              </TableCell>
-              <TableCell>
-                {guest.has_shared_invitation ? "Yes" : "No"}
-              </TableCell>
-            </TableRow>
-          ))}
+          {filteredGuests.map((guest, index) => {
+            const bgColor = guest.has_shared_invitation
+              ? "white"
+              : guest.origin === "diaz"
+              ? "#E3F2FD" // Soft blue
+              : guest.origin === "wulan"
+              ? "#FCE4EC" // Soft pink
+              : "white";
+
+            return (
+              <TableRow
+                key={guest.id || index}
+                sx={{ backgroundColor: bgColor }}
+              >
+                <TableCell>{index + 1}</TableCell>
+                <TableCell>{guest.group_name}</TableCell>
+                <TableCell>
+                  <Box
+                    sx={{
+                      width: 60,
+                      height: 60,
+                      borderRadius: 1,
+                      overflow: "hidden",
+                      cursor: "pointer",
+                      border: "1px solid #ccc",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      backgroundColor: "#fafafa",
+                    }}
+                    onClick={() =>
+                      document
+                        .getElementById(`upload-image-${guest.group_name}`)
+                        ?.click()
+                    }
+                  >
+                    {guest.image ? (
+                      <img
+                        src={guest.image}
+                        alt="Group"
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                        }}
+                      />
+                    ) : (
+                      <Typography variant="caption" color="textSecondary">
+                        No Image
+                      </Typography>
+                    )}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      id={`upload-image-${guest.group_name}`}
+                      style={{ display: "none" }}
+                      onChange={async (e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                          try {
+                            await uploadGroupImage(file, guest.group_name);
+                            fetchGuests(); // refresh UI
+                          } catch (err) {
+                            console.error("Failed to upload image:", err);
+                            alert("Upload failed");
+                          }
+                        }
+                      }}
+                    />
+                  </Box>
+                </TableCell>
+                <TableCell>{guest.guest_name}</TableCell>
+                {/* <TableCell>
+                  {guest.qr_code_image ? (
+                    <img
+                      src={guest.qr_code_image}
+                      alt="QR Code"
+                      className="w-24 h-24 object-contain"
+                    />
+                  ) : (
+                    "No QR"
+                  )}
+                </TableCell> */}
+                <TableCell>{guest.pax_count}</TableCell> {/* NEW */}
+                <TableCell>
+                  <a
+                    href={guest.invitation_link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {guest.invitation_link}
+                  </a>
+                  <br />
+                  <Button
+                    size="small"
+                    onClick={() => copyInvitation(guest)}
+                    sx={{ mt: 1 }}
+                  >
+                    Copy Message
+                  </Button>
+                  <Button
+                    onClick={() => copyGroupInvitation(guest.group_name)}
+                    className="bg-blue-500 text-white px-3 py-1 rounded-md text-sm"
+                  >
+                    Copy Group Link
+                  </Button>
+                </TableCell>
+                <TableCell>
+                  <Button onClick={() => handleOpenModal(guest)}>Edit</Button>
+                  <Button color="error" onClick={() => handleDelete(guest.id)}>
+                    Delete
+                  </Button>
+                </TableCell>
+                <TableCell>
+                  {guest.has_shared_invitation ? "Yes" : "No"}
+                </TableCell>
+                <TableCell>
+                  {guest.is_attending === null &&
+                  guest.check_in_time === null ? (
+                    <Typography variant="body2">Not responded</Typography>
+                  ) : (
+                    <Box>
+                      <Typography variant="body2">
+                        Attending: {guest.is_attending ? "Yes" : "No"}
+                      </Typography>
+                      <Typography variant="body2">
+                        Check-in:{" "}
+                        {guest.check_in_time
+                          ? new Date(guest.check_in_time).toLocaleString()
+                          : "Not yet"}
+                      </Typography>
+                    </Box>
+                  )}
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </Container>

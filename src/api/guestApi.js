@@ -9,13 +9,24 @@ export const updateGuest = (id, data) =>
 export const deleteGuest = (id) => axios.delete(`${BASE_URL}/guests/${id}`);
 export const shareInvitation = (id) =>
   axios.post(`${BASE_URL}/guests/shared/${id}`);
-export const uploadGuestExcel = (file) => {
+export const uploadGuestExcel = (file, origin) => {
   const formData = new FormData();
   formData.append("file", file);
-
+  formData.append("origin", origin); // ✅ kirim origin dari parameter
   return axios.post(`${BASE_URL}/guests/upload`, formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
   });
 };
+export const uploadGroupImage = (file, groupName) => {
+  const formData = new FormData();
+  formData.append("imageFile", file);
+  formData.append("groupName", groupName);
+
+  return axios.post(`${BASE_URL}/guests/group-image`, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+};
+export const shareGroupLink = (id) =>
+  axios.patch(`${BASE_URL}/groups/${id}/share`);
