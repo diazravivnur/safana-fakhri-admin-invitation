@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// const BASE_URL = "http://localhost:5000/api/wedding/v1"; // sesuaikan dengan backendmu
-const BASE_URL = "https://doa-backend.my.id/invitation/api/wedding/v1"; // sesuaikan dengan backendmu
+const BASE_URL = import.meta.env.VITE_API_BASE_URL; // sesuaikan dengan backendmu
+// const BASE_URL = "https://doa-backend.my.id/invitation/api/wedding/v1"; // sesuaikan dengan backendmu
 
 export const getGuests = () => axios.get(`${BASE_URL}/guests`);
 export const createGuest = (data) => axios.post(`${BASE_URL}/guests`, data);
