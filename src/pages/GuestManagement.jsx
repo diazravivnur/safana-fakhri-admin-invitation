@@ -118,7 +118,7 @@ export default function GuestManagement() {
   const generateInvitationMessage = (guest) => {
     return `Assalamu'alaikum Wr. Wb
 
-    Yth. ${guest.guest_name}
+    Yth. ${guest.group_name}
 
     Tanpa mengurangi rasa hormat, perkenankan kami mengundang Bapak/Ibu/Saudara/i, teman sekaligus sahabat, untuk menghadiri acara kami :
 
@@ -463,6 +463,8 @@ export default function GuestManagement() {
                   </Button>
                   <Button
                     onClick={() => copyGroupInvitation(guest.group_name)}
+                    sx={{ mt: 1 }}
+                    size="small"
                     className="bg-blue-500 text-white px-3 py-1 rounded-md text-sm"
                   >
                     Copy Group Link

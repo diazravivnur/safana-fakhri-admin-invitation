@@ -1,6 +1,6 @@
 import axios from "axios";
-
-const BASE_URL = "http://localhost:5000/api/wedding/v1"; // sesuaikan dengan backendmu
+// http://202.10.40.153:5000/api/wedding/v1/guests/slug/m-fakhri-dwi-ariza-dan-partner
+const BASE_URL = "http://202.10.40.153:5000/api/wedding/v1"; // sesuaikan dengan backendmu
 
 export const getGuests = () => axios.get(`${BASE_URL}/guests`);
 export const createGuest = (data) => axios.post(`${BASE_URL}/guests`, data);
