@@ -28,5 +28,6 @@ export const uploadGroupImage = (file, groupName) => {
     headers: { "Content-Type": "multipart/form-data" },
   });
 };
+
 export const shareGroupLink = (id) =>
   axios.patch(`${BASE_URL}/groups/${id}/share`);

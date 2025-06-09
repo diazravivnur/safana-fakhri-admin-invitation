@@ -11,7 +11,7 @@ const ExcelUploader = () => {
 
     try {
       await axios.post(
-        "http://localhost:5000/api/wedding/v1/guests/upload",
+        "http://202.10.40.153:5000/api/wedding/v1/guests/upload",
         formData
       );
       alert("Berhasil upload Excel");

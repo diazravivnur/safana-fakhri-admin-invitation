@@ -15,7 +15,7 @@ const GuestTable = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/wedding/v1/guests")
+      .get("http://202.10.40.153:5000/api/wedding/v1/guests")
       .then((res) => setGuests(res.data))
       .catch((err) => console.error(err));
   }, []);
