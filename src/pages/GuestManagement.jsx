@@ -118,7 +118,7 @@ export default function GuestManagement() {
   const generateInvitationMessage = (guest) => {
     return `Assalamu'alaikum Wr. Wb
 
-    Yth. ${guest.group_name}
+    Yth. ${guest.guest_name}
 
     Tanpa mengurangi rasa hormat, perkenankan kami mengundang Bapak/Ibu/Saudara/i, teman sekaligus sahabat, untuk menghadiri acara kami :
 

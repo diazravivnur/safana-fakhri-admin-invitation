@@ -1,6 +1,7 @@
 import axios from "axios";
-// http://202.10.40.153:5000/api/wedding/v1/guests/slug/m-fakhri-dwi-ariza-dan-partner
-const BASE_URL = "http://202.10.40.153:5000/api/wedding/v1"; // sesuaikan dengan backendmu
+
+// const BASE_URL = "http://localhost:5000/api/wedding/v1"; // sesuaikan dengan backendmu
+const BASE_URL = "https://doa-backend.my.id/invitation/api/wedding/v1"; // sesuaikan dengan backendmu
 
 export const getGuests = () => axios.get(`${BASE_URL}/guests`);
 export const createGuest = (data) => axios.post(`${BASE_URL}/guests`, data);
@@ -28,6 +29,5 @@ export const uploadGroupImage = (file, groupName) => {
     headers: { "Content-Type": "multipart/form-data" },
   });
 };
-
 export const shareGroupLink = (id) =>
   axios.patch(`${BASE_URL}/groups/${id}/share`);
