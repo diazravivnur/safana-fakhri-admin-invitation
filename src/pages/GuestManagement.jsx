@@ -60,7 +60,7 @@ export default function GuestManagement() {
 
   const handleSave = async (form) => {
     if (editingGuest) {
-      await updateGuest(editingGuest.id, form);
+      await updateGuest(editingGuest.invitation_id, form);
     } else {
       await createGuest(form);
     }
@@ -116,23 +116,37 @@ export default function GuestManagement() {
   };
 
   const generateInvitationMessage = (guest) => {
-    return `Assalamu'alaikum Wr. Wb
+    return `Bismillahirrahmanirrahim
+Assalamu’alaikum Warahmatullahi Wabarakatuh
 
-    Yth. ${guest.guest_name}
+Kepada Yth.
+Bapak/Ibu/Saudara/i
+${guest.guest_name}
+Di Tempat
 
-    Tanpa mengurangi rasa hormat, perkenankan kami mengundang Bapak/Ibu/Saudara/i, teman sekaligus sahabat, untuk menghadiri acara kami :
+Dengan memohon Rahmat Allah SWT dan tanpa mengurangi rasa hormat, perkenankan kami mengundang Bapak/Ibu/Saudara/i, untuk menghadiri acara Pernikahan Kami:
 
-    ${guest.invitation_link}
+Wulan Asri Septia & Diaz Raviv Nur
 
-    Merupakan suatu kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan untuk hadir dan memberikan doa restu.
+Berikut link undangan kami, untuk info lengkap dari acara bisa kunjungi:
 
-    Mohon maaf perihal undangan hanya di bagikan melalui pesan ini. Terima kasih banyak atas perhatiannya.
+${guest.invitation_link}
 
-    Link Map:
-    https://maps.app.goo.gl/1Dp2T1z38gyVYK5LA
+Link Maps:
+https://maps.app.goo.gl/1Dp2T1z38gyVYK5LA
 
-    Wassalamu'alaikum Wr. Wb.
-    Terima Kasih.`;
+Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan untuk hadir dan memberikan doa restu.
+
+Mohon maaf perihal undangan hanya di bagikan melalui pesan ini.
+
+Note:
+Jika link tidak bisa dibuka, silahkan copy link kemudian paste di Chrome atau Browser lainnya.
+Untuk tampilan terbaik, silahkan akses melalui Browser Chrome / Safari dan non-aktifkan Dark Mode / Mode Gelap.
+
+Terima kasih banyak atas perhatiannya.
+
+Kami yang berbahagia,
+Wulan & Diaz`;
   };
 
   const generateInvitationGroupMessage = (groupName) => {
@@ -159,7 +173,7 @@ export default function GuestManagement() {
     const message = generateInvitationMessage(guest);
     try {
       await navigator.clipboard.writeText(message);
-      shareInvitation(guest.id);
+      shareInvitation(guest.invitation_id);
       alert("Invitation message copied to clipboard!");
       fetchGuests(); // refresh to reflect has_shared_invitation
     } catch (err) {
@@ -461,18 +475,13 @@ export default function GuestManagement() {
                   >
                     Copy Message
                   </Button>
-                  <Button
-                    onClick={() => copyGroupInvitation(guest.group_name)}
-                    sx={{ mt: 1 }}
-                    size="small"
-                    className="bg-blue-500 text-white px-3 py-1 rounded-md text-sm"
-                  >
-                    Copy Group Link
-                  </Button>
                 </TableCell>
                 <TableCell>
                   <Button onClick={() => handleOpenModal(guest)}>Edit</Button>
-                  <Button color="error" onClick={() => handleDelete(guest.id)}>
+                  <Button
+                    color="error"
+                    onClick={() => handleDelete(guest.invitation_id)}
+                  >
                     Delete
                   </Button>
                 </TableCell>
