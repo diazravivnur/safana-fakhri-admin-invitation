@@ -117,125 +117,72 @@ export default function GuestManagement() {
 
   const generateInvitationMessage = (guest) => {
     return `Bismillahirrahmanirrahim
-    Assalamu’alaikum Warahmatullahi Wabarakatuh
+Assalamu’alaikum Warahmatullahi Wabarakatuh
 
-    Kepada Yth.
-    Bapak/Ibu/Saudara/i
-    *${guest.guest_name}*
-    Di Tempat
+Kepada Yth.
+Bapak/Ibu/Saudara/i
+*${guest.guest_name}*
+Di Tempat
 
-    Dengan memohon Rahmat Allah SWT dan tanpa mengurangi rasa hormat, perkenankan kami mengundang Bapak/Ibu/Saudara/i, untuk menghadiri acara Pernikahan Kami:
+Dengan memohon Rahmat Allah SWT dan tanpa mengurangi rasa hormat, perkenankan kami mengundang Bapak/Ibu/Saudara/i, untuk menghadiri acara Pernikahan Kami:
 
-    *Wulan Asri Septia & Diaz Raviv Nur*
+*Wulan Asri Septia & Diaz Raviv Nur*
 
-    Berikut link undangan kami, untuk info lengkap dari acara bisa kunjungi:
+Berikut link undangan kami, untuk info lengkap dari acara bisa kunjungi:
 
-    ${guest.invitation_link}
+${guest.invitation_link}
 
-    Link Maps:
-    https://maps.app.goo.gl/1Dp2T1z38gyVYK5LA
+Link Maps:
+https://maps.app.goo.gl/1Dp2T1z38gyVYK5LA
 
-    Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan untuk hadir dan memberikan doa restu.
+Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan untuk hadir dan memberikan doa restu.
 
-    Mohon maaf perihal undangan hanya di bagikan melalui pesan ini.
+Mohon maaf perihal undangan hanya di bagikan melalui pesan ini.
 
-    _Note:_
-    _Jika link tidak bisa dibuka, silahkan copy link kemudian paste di Chrome atau Browser lainnya._
-    _Untuk tampilan terbaik, silahkan akses melalui Browser Chrome / Safari dan non-aktifkan Dark Mode / Mode Gelap._
+_Note:_
+_Jika link tidak bisa dibuka, silahkan copy link kemudian paste di Chrome atau Browser lainnya._
+_Untuk tampilan terbaik, silahkan akses melalui Browser Chrome / Safari dan non-aktifkan Dark Mode / Mode Gelap._
 
-    Terima kasih banyak atas perhatiannya.
+Terima kasih banyak atas perhatiannya.
 
-    Kami yang berbahagia,
-    *Wulan & Diaz*`;
+Kami yang berbahagia,
+*Wulan & Diaz*`;
   };
 
-  const generateInvitationMessageDestie = (guest) => {
+  const generateInvitationMessageOrtu = (guest) => {
     return `Bismillahirrahmanirrahim
-    Assalamu’alaikum Warahmatullahi Wabarakatuh
+Assalamu’alaikum Warahmatullahi Wabarakatuh
 
-    Kepada Yth.
-    Bapak/Ibu/Saudara/i
-    *${guest.guest_name}*
-    Di Tempat
+Kepada Yth.
+Bapak/Ibu/Saudara/i
+*${guest.guest_name}*
+Di Tempat
 
-    Dengan memohon Rahmat Allah SWT dan tanpa mengurangi rasa hormat, perkenankan kami mengundang Bapak/Ibu/Saudara/i, untuk menghadiri acara Pernikahan Anak Kami:
+Dengan memohon Rahmat Allah SWT dan tanpa mengurangi rasa hormat, perkenankan kami mengundang Bapak/Ibu/Saudara/i, untuk menghadiri acara Pernikahan Anak Kami:
 
-    *Wulan Asri Septia & Diaz Raviv Nur*
+*Wulan Asri Septia & Diaz Raviv Nur*
 
 
-    Berikut link undangan kami, untuk info lengkap dari acara bisa kunjungi:
+Berikut link undangan kami, untuk info lengkap dari acara bisa kunjungi:
 
-    ${guest.invitation_link}
+${guest.invitation_link}
 
-    Link Maps:
-    https://maps.app.goo.gl/1Dp2T1z38gyVYK5LA
+Link Maps:
+https://maps.app.goo.gl/1Dp2T1z38gyVYK5LA
 
-    Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan untuk hadir dan memberikan doa restu.
+Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan untuk hadir dan memberikan doa restu.
 
-    Mohon maaf perihal undangan hanya di bagikan melalui pesan ini.
+Mohon maaf perihal undangan hanya di bagikan melalui pesan ini.
 
-    _Note:_
-    _Jika link tidak bisa dibuka, silahkan copy link kemudian paste di Chrome atau Browser lainnya._
-    _Untuk tampilan terbaik, silahkan akses melalui Browser Chrome / Safari dan non-aktifkan Dark Mode / Mode Gelap._
+_Note:_
+_Jika link tidak bisa dibuka, silahkan copy link kemudian paste di Chrome atau Browser lainnya._
+_Untuk tampilan terbaik, silahkan akses melalui Browser Chrome / Safari dan non-aktifkan Dark Mode / Mode Gelap._
 
-    Terima kasih banyak atas perhatiannya.
+Terima kasih banyak atas perhatiannya.
 
-    Kami yang berbahagia,
-    *M. Nur Azirana & Destie Surya Wijaya*`;
-  };
-
-  const generateInvitationMessageIbuCici = (guest) => {
-    return `Bismillahirrahmanirrahim
-    Assalamu’alaikum Warahmatullahi Wabarakatuh
-
-    Kepada Yth.
-    Bapak/Ibu/Saudara/i
-    *${guest.guest_name}*
-    Di Tempat
-
-    Dengan memohon Rahmat Allah SWT dan tanpa mengurangi rasa hormat, perkenankan kami mengundang Bapak/Ibu/Saudara/i, untuk menghadiri acara Pernikahan Anak Kami:
-
-    *Wulan Asri Septia & Diaz Raviv Nur*
-
-    Berikut link undangan kami, untuk info lengkap dari acara bisa kunjungi:
-
-    ${guest.invitation_link}
-
-    Link Maps:
-    https://maps.app.goo.gl/1Dp2T1z38gyVYK5LA
-
-    Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan untuk hadir dan memberikan doa restu.
-
-    Mohon maaf perihal undangan hanya di bagikan melalui pesan ini.
-
-    _Note:_
-    _Jika link tidak bisa dibuka, silahkan copy link kemudian paste di Chrome atau Browser lainnya._
-    _Untuk tampilan terbaik, silahkan akses melalui Browser Chrome / Safari dan non-aktifkan Dark Mode / Mode Gelap._
-
-    Terima kasih banyak atas perhatiannya.
-
-    Kami yang berbahagia,
-    *Dharma & Cici*`;
-  };
-
-  const generateInvitationGroupMessage = (groupName) => {
-    return `Assalamu'alaikum Wr. Wb
-
-    Yth. ${groupName}
-
-    Tanpa mengurangi rasa hormat, perkenankan kami mengundang Bapak/Ibu/Saudara/i, teman sekaligus sahabat, untuk menghadiri acara kami :
-
-    ${guest.invitation_link}
-
-    Merupakan suatu kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan untuk hadir dan memberikan doa restu.
-
-    Mohon maaf perihal undangan hanya di bagikan melalui pesan ini. Terima kasih banyak atas perhatiannya.
-
-    Link Map:
-    https://maps.app.goo.gl/1Dp2T1z38gyVYK5LA
-
-    Wassalamu'alaikum Wr. Wb.
-    Terima Kasih.`;
+Kami yang berbahagia,
+*Kel. Bpk Agus & Ibu Cici*
+*Kel. Bpk M. Nur & Ibu Destie*`;
   };
 
   const copyInvitation = async (guest) => {
@@ -251,8 +198,8 @@ export default function GuestManagement() {
     }
   };
 
-  const copyInvitationDestie = async (guest) => {
-    const message = generateInvitationMessageDestie(guest);
+  const copyInvitationOrtu = async (guest) => {
+    const message = generateInvitationMessageOrtu(guest);
     try {
       await navigator.clipboard.writeText(message);
       shareInvitation(guest.invitation_id);
@@ -572,18 +519,10 @@ export default function GuestManagement() {
                   </Button>
                   <Button
                     size="small"
-                    onClick={() => copyInvitationDestie(guest)}
+                    onClick={() => copyInvitationOrtu(guest)}
                     sx={{ mt: 1 }}
                   >
-                    Copy Message ( Destie )
-                  </Button>
-
-                  <Button
-                    size="small"
-                    onClick={() => copyInvitationBuCici(guest)}
-                    sx={{ mt: 1 }}
-                  >
-                    Copy Message ( Ibu Cici )
+                    Copy Message ( Ortu )
                   </Button>
                 </TableCell>
                 <TableCell>
