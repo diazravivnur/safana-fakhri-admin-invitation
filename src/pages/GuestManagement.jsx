@@ -162,7 +162,6 @@ Dengan memohon Rahmat Allah SWT dan tanpa mengurangi rasa hormat, perkenankan ka
 
 *Wulan Asri Septia & Diaz Raviv Nur*
 
-
 Berikut link undangan kami, untuk info lengkap dari acara bisa kunjungi:
 
 ${guest.invitation_link}
@@ -181,7 +180,7 @@ _Untuk tampilan terbaik, silahkan akses melalui Browser Chrome / Safari dan non-
 Terima kasih banyak atas perhatiannya.
 
 Kami yang berbahagia,
-*Kel. Bpk Agus & Ibu Cici*
+*Kel. Bpk Dharma & Ibu Cici*
 *Kel. Bpk M. Nur & Ibu Destie*`;
   };
 
