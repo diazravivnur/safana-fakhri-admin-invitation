@@ -117,36 +117,36 @@ export default function GuestManagement() {
 
   const generateInvitationMessage = (guest) => {
     return `Bismillahirrahmanirrahim
-Assalamu’alaikum Warahmatullahi Wabarakatuh
+    Assalamu’alaikum Warahmatullahi Wabarakatuh
 
-Kepada Yth.
-Bapak/Ibu/Saudara/i
-${guest.guest_name}
-Di Tempat
+    Kepada Yth.
+    Bapak/Ibu/Saudara/i
+    *${guest.guest_name}*
+    Di Tempat
 
-Dengan memohon Rahmat Allah SWT dan tanpa mengurangi rasa hormat, perkenankan kami mengundang Bapak/Ibu/Saudara/i, untuk menghadiri acara Pernikahan Kami:
+    Dengan memohon Rahmat Allah SWT dan tanpa mengurangi rasa hormat, perkenankan kami mengundang Bapak/Ibu/Saudara/i, untuk menghadiri acara Pernikahan Anak Kami:
 
-Wulan Asri Septia & Diaz Raviv Nur
+    Wulan Asri Septia & Diaz Raviv Nur
 
-Berikut link undangan kami, untuk info lengkap dari acara bisa kunjungi:
+    Berikut link undangan kami, untuk info lengkap dari acara bisa kunjungi:
 
-${guest.invitation_link}
+    ${guest.invitation_link}
 
-Link Maps:
-https://maps.app.goo.gl/1Dp2T1z38gyVYK5LA
+    Link Maps:
+    https://maps.app.goo.gl/1Dp2T1z38gyVYK5LA
 
-Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan untuk hadir dan memberikan doa restu.
+    Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan untuk hadir dan memberikan doa restu.
 
-Mohon maaf perihal undangan hanya di bagikan melalui pesan ini.
+    Mohon maaf perihal undangan hanya di bagikan melalui pesan ini.
 
-Note:
-Jika link tidak bisa dibuka, silahkan copy link kemudian paste di Chrome atau Browser lainnya.
-Untuk tampilan terbaik, silahkan akses melalui Browser Chrome / Safari dan non-aktifkan Dark Mode / Mode Gelap.
+    _Note:_
+    _Jika link tidak bisa dibuka, silahkan copy link kemudian paste di Chrome atau Browser lainnya._
+    _Untuk tampilan terbaik, silahkan akses melalui Browser Chrome / Safari dan non-aktifkan Dark Mode / Mode Gelap._
 
-Terima kasih banyak atas perhatiannya.
+    Terima kasih banyak atas perhatiannya.
 
-Kami yang berbahagia,
-Wulan & Diaz`;
+    Kami yang berbahagia,
+    *Wulan & Diaz*`;
   };
 
   const generateInvitationGroupMessage = (groupName) => {
