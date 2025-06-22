@@ -20,6 +20,16 @@ export const uploadGuestExcel = (file, origin) => {
     },
   });
 };
+export const uploadBulkGuestExcel = (file, origin) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("origin", origin); // ✅ kirim origin dari parameter
+  return axios.post(`${BASE_URL}/guests/bulk-upload`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
 export const uploadGroupImage = (file, groupName) => {
   const formData = new FormData();
   formData.append("imageFile", file);

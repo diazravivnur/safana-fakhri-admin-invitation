@@ -8,6 +8,7 @@ import {
   shareInvitation,
   uploadGroupImage,
   shareGroupLink,
+  uploadBulkGuestExcel,
 } from "../api/guestApi";
 import GuestForm from "../components/GuestForm";
 import {
@@ -45,6 +46,8 @@ export default function GuestManagement() {
     group_name: "",
     has_shared_invitation: "",
   });
+  const [uploadedGuests, setUploadedGuests] = useState([]);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [filterShared, setFilterShared] = useState("");
   const [origin, setOrigin] = useState("");
 
@@ -92,7 +95,34 @@ export default function GuestManagement() {
     }
 
     try {
-      await uploadGuestExcel(selectedFile, origin); // ← use centralized API
+      const response = await uploadGuestExcel(selectedFile, origin); // ← use centralized API
+      if (response?.data) {
+        alert("Upload berhasil!");
+        setUploadedGuests(response.data.data); // guests uploaded from backend
+        setShowSuccessPopup(true);
+      }
+      fetchGuests();
+      setShowUploadModal(false);
+      setSelectedFile(null);
+    } catch (error) {
+      alert("Upload failed");
+      console.error(error);
+    }
+  };
+
+  const handleBulkUploadExcel = async () => {
+    if (!selectedFile || !origin) {
+      alert("Pilih file dan asal undangan terlebih dahulu");
+      return;
+    }
+
+    try {
+      const response = await uploadBulkGuestExcel(selectedFile, origin);
+      if (response?.data) {
+        alert("Upload berhasil!");
+        setUploadedGuests(response.data.data); // guests uploaded from backend
+        setShowSuccessPopup(true);
+      }
       fetchGuests();
       setShowUploadModal(false);
       setSelectedFile(null);
@@ -281,6 +311,9 @@ Kami yang berbahagia,
         <Button variant="outlined" onClick={() => setShowUploadModal(true)}>
           Upload Excel
         </Button>
+        <Button variant="outlined" onClick={() => setShowUploadModal(true)}>
+          Bulk Upload Excel
+        </Button>
       </Box>
 
       {/* Filter Section */}
@@ -398,7 +431,40 @@ Kami yang berbahagia,
           </Button>
         </DialogActions>
       </Dialog>
+      <Dialog
+        open={showUploadModal}
+        onClose={() => setShowUploadModal(false)}
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle>Bulk Upload Excel</DialogTitle>
+        <DialogContent>
+          <FormControl fullWidth sx={{ mt: 2 }}>
+            <InputLabel>Asal Undangan</InputLabel>
+            <Select
+              value={origin}
+              label="Asal Undangan"
+              onChange={(e) => setOrigin(e.target.value)}
+            >
+              <MenuItem value="diaz">Diaz</MenuItem>
+              <MenuItem value="wulan">Wulan</MenuItem>
+            </Select>
+          </FormControl>
 
+          <input
+            type="file"
+            accept=".xlsx"
+            onChange={(e) => setSelectedFile(e.target.files[0])}
+            style={{ marginTop: "1.5rem" }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setShowUploadModal(false)}>Cancel</Button>
+          <Button onClick={handleBulkUploadExcel} variant="contained">
+            Upload
+          </Button>
+        </DialogActions>
+      </Dialog>
       {/* Guest Table */}
       <Table sx={{ mt: 4 }}>
         <TableHead>
@@ -559,6 +625,38 @@ Kami yang berbahagia,
           })}
         </TableBody>
       </Table>
+      <Dialog
+        open={showSuccessPopup}
+        onClose={() => setShowSuccessPopup(false)}
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle>Upload Berhasil 🎉</DialogTitle>
+        <DialogContent dividers>
+          <Typography gutterBottom>
+            Total tamu yang berhasil ditambahkan:{" "}
+            <strong>{uploadedGuests.length}</strong>
+          </Typography>
+          <Box sx={{ maxHeight: 300, overflowY: "auto" }}>
+            <ul>
+              {uploadedGuests.map((guest, index) => (
+                <li key={index}>
+                  {guest.guest_name} — ID:{" "}
+                  <strong>{guest.invitation_id}</strong>
+                </li>
+              ))}
+            </ul>
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => setShowSuccessPopup(false)}
+            variant="contained"
+          >
+            Tutup
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 }
