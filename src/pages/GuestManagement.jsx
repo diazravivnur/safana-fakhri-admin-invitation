@@ -37,19 +37,14 @@ export default function GuestManagement() {
   const [guests, setGuests] = useState([]);
   const [editingGuest, setEditingGuest] = useState(null);
   const [showForm, setShowForm] = useState(false);
-  const [showUploadModal, setShowUploadModal] = useState(false);
+  const [uploadModalType, setUploadModalType] = useState(null); // 'single' | 'bulk'
   const [selectedFile, setSelectedFile] = useState(null);
   const [filterName, setFilterName] = useState("");
   const [filterGroup, setFilterGroup] = useState("");
-  const [filters, setFilters] = useState({
-    guest_name: "",
-    group_name: "",
-    has_shared_invitation: "",
-  });
-  const [uploadedGuests, setUploadedGuests] = useState([]);
-  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [filterShared, setFilterShared] = useState("");
   const [origin, setOrigin] = useState("");
+  const [uploadedGuests, setUploadedGuests] = useState([]);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
   const fetchGuests = async () => {
     const res = await getGuests();
@@ -95,14 +90,14 @@ export default function GuestManagement() {
     }
 
     try {
-      const response = await uploadGuestExcel(selectedFile, origin); // ← use centralized API
+      const response = await uploadGuestExcel(selectedFile, origin);
       if (response?.data) {
         alert("Upload berhasil!");
-        setUploadedGuests(response.data.data); // guests uploaded from backend
+        setUploadedGuests(response.data.data);
         setShowSuccessPopup(true);
       }
       fetchGuests();
-      setShowUploadModal(false);
+      setUploadModalType(null);
       setSelectedFile(null);
     } catch (error) {
       alert("Upload failed");
@@ -120,11 +115,11 @@ export default function GuestManagement() {
       const response = await uploadBulkGuestExcel(selectedFile, origin);
       if (response?.data) {
         alert("Upload berhasil!");
-        setUploadedGuests(response.data.data); // guests uploaded from backend
+        setUploadedGuests(response.data.data);
         setShowSuccessPopup(true);
       }
       fetchGuests();
-      setShowUploadModal(false);
+      setUploadModalType(null);
       setSelectedFile(null);
     } catch (error) {
       alert("Upload failed");
@@ -220,7 +215,7 @@ Kami yang berbahagia,
       await navigator.clipboard.writeText(message);
       shareInvitation(guest.invitation_id);
       alert("Invitation message copied to clipboard!");
-      fetchGuests(); // refresh to reflect has_shared_invitation
+      fetchGuests();
     } catch (err) {
       alert("Failed to copy!");
       console.error(err);
@@ -233,34 +228,7 @@ Kami yang berbahagia,
       await navigator.clipboard.writeText(message);
       shareInvitation(guest.invitation_id);
       alert("Invitation message copied to clipboard!");
-      fetchGuests(); // refresh to reflect has_shared_invitation
-    } catch (err) {
-      alert("Failed to copy!");
-      console.error(err);
-    }
-  };
-
-  const copyInvitationBuCici = async (guest) => {
-    const message = generateInvitationMessageIbuCici(guest);
-    try {
-      await navigator.clipboard.writeText(message);
-      shareInvitation(guest.invitation_id);
-      alert("Invitation message copied to clipboard!");
-      fetchGuests(); // refresh to reflect has_shared_invitation
-    } catch (err) {
-      alert("Failed to copy!");
-      console.error(err);
-    }
-  };
-
-  const copyGroupInvitation = async (groupName) => {
-    console.log(123, groupName);
-    const message = generateInvitationMessage(groupName);
-    try {
-      await navigator.clipboard.writeText(message);
-      shareGroupLink(groupName);
-      alert("Invitation message copied to clipboard!");
-      fetchGuests(); // refresh to reflect has_shared_invitation
+      fetchGuests();
     } catch (err) {
       alert("Failed to copy!");
       console.error(err);
@@ -308,16 +276,17 @@ Kami yang berbahagia,
         <Button variant="contained" onClick={() => handleOpenModal()}>
           Add Guest
         </Button>
-        <Button variant="outlined" onClick={() => setShowUploadModal(true)}>
+        <Button variant="outlined" onClick={() => setUploadModalType("single")}>
           Upload Excel
         </Button>
-        <Button variant="outlined" onClick={() => setShowUploadModal(true)}>
+        <Button variant="outlined" onClick={() => setUploadModalType("bulk")}>
           Bulk Upload Excel
         </Button>
       </Box>
 
-      {/* Filter Section */}
+      {/* Filters */}
       <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", mb: 3 }}>
+        {/* Origin Filter */}
         <TextField
           label="Origin"
           variant="outlined"
@@ -331,6 +300,8 @@ Kami yang berbahagia,
           <MenuItem value="diaz">Diaz</MenuItem>
           <MenuItem value="wulan">Wulan</MenuItem>
         </TextField>
+
+        {/* Name Filter */}
         <TextField
           label="Name"
           variant="outlined"
@@ -339,6 +310,7 @@ Kami yang berbahagia,
           onChange={(e) => setFilterName(e.target.value)}
         />
 
+        {/* Group Filter */}
         <TextField
           label="Group"
           variant="outlined"
@@ -358,6 +330,7 @@ Kami yang berbahagia,
             ))}
         </TextField>
 
+        {/* Shared Filter */}
         <TextField
           label="Shared?"
           variant="outlined"
@@ -376,7 +349,8 @@ Kami yang berbahagia,
           Reset Filters
         </Button>
       </Box>
-      {/* Modal for Add/Edit Guest */}
+
+      {/* Add/Edit Guest Form */}
       <Dialog
         open={showForm}
         onClose={handleCloseModal}
@@ -396,10 +370,10 @@ Kami yang berbahagia,
         </DialogActions>
       </Dialog>
 
-      {/* Modal for Upload Excel */}
+      {/* Upload Excel Modal */}
       <Dialog
-        open={showUploadModal}
-        onClose={() => setShowUploadModal(false)}
+        open={uploadModalType === "single"}
+        onClose={() => setUploadModalType(null)}
         fullWidth
         maxWidth="sm"
       >
@@ -425,15 +399,17 @@ Kami yang berbahagia,
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setShowUploadModal(false)}>Cancel</Button>
+          <Button onClick={() => setUploadModalType(null)}>Cancel</Button>
           <Button onClick={handleUploadExcel} variant="contained">
             Upload
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* Bulk Upload Excel Modal */}
       <Dialog
-        open={showUploadModal}
-        onClose={() => setShowUploadModal(false)}
+        open={uploadModalType === "bulk"}
+        onClose={() => setUploadModalType(null)}
         fullWidth
         maxWidth="sm"
       >
@@ -459,7 +435,7 @@ Kami yang berbahagia,
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setShowUploadModal(false)}>Cancel</Button>
+          <Button onClick={() => setUploadModalType(null)}>Cancel</Button>
           <Button onClick={handleBulkUploadExcel} variant="contained">
             Upload
           </Button>
