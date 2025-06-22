@@ -470,12 +470,11 @@ Kami yang berbahagia,
         <TableHead>
           <TableRow>
             <TableCell>No.</TableCell>
+            <TableCell>Guest Name</TableCell>
+            <TableCell>Invitation Link</TableCell>
             <TableCell>Group</TableCell>
             <TableCell>Group Image</TableCell>
-            <TableCell>Guest Name</TableCell>
-            {/* <TableCell>QR</TableCell> */}
             <TableCell>Pax</TableCell>
-            <TableCell>Invitation Link</TableCell>
             <TableCell>Action</TableCell>
             <TableCell>Shared?</TableCell>
             <TableCell>isAttending?</TableCell>
@@ -486,9 +485,9 @@ Kami yang berbahagia,
             const bgColor = guest.has_shared_invitation
               ? "white"
               : guest.origin === "diaz"
-              ? "#E3F2FD" // Soft blue
+              ? "#E3F2FD"
               : guest.origin === "wulan"
-              ? "#FCE4EC" // Soft pink
+              ? "#FCE4EC"
               : "white";
 
             return (
@@ -497,6 +496,31 @@ Kami yang berbahagia,
                 sx={{ backgroundColor: bgColor }}
               >
                 <TableCell>{index + 1}</TableCell>
+                <TableCell>{guest.guest_name}</TableCell>
+                <TableCell>
+                  <a
+                    href={guest.invitation_link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {guest.invitation_link}
+                  </a>
+                  <br />
+                  <Button
+                    size="small"
+                    onClick={() => copyInvitation(guest)}
+                    sx={{ mt: 1 }}
+                  >
+                    Copy Message
+                  </Button>
+                  <Button
+                    size="small"
+                    onClick={() => copyInvitationOrtu(guest)}
+                    sx={{ mt: 1 }}
+                  >
+                    Copy Message ( Ortu )
+                  </Button>
+                </TableCell>
                 <TableCell>{guest.group_name}</TableCell>
                 <TableCell>
                   <Box
@@ -543,7 +567,7 @@ Kami yang berbahagia,
                         if (file) {
                           try {
                             await uploadGroupImage(file, guest.group_name);
-                            fetchGuests(); // refresh UI
+                            fetchGuests();
                           } catch (err) {
                             console.error("Failed to upload image:", err);
                             alert("Upload failed");
@@ -553,43 +577,7 @@ Kami yang berbahagia,
                     />
                   </Box>
                 </TableCell>
-                <TableCell>{guest.guest_name}</TableCell>
-                {/* <TableCell>
-                  {guest.qr_code_image ? (
-                    <img
-                      src={guest.qr_code_image}
-                      alt="QR Code"
-                      className="w-24 h-24 object-contain"
-                    />
-                  ) : (
-                    "No QR"
-                  )}
-                </TableCell> */}
-                <TableCell>{guest.pax_count}</TableCell> {/* NEW */}
-                <TableCell>
-                  <a
-                    href={guest.invitation_link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {guest.invitation_link}
-                  </a>
-                  <br />
-                  <Button
-                    size="small"
-                    onClick={() => copyInvitation(guest)}
-                    sx={{ mt: 1 }}
-                  >
-                    Copy Message
-                  </Button>
-                  <Button
-                    size="small"
-                    onClick={() => copyInvitationOrtu(guest)}
-                    sx={{ mt: 1 }}
-                  >
-                    Copy Message ( Ortu )
-                  </Button>
-                </TableCell>
+                <TableCell>{guest.pax_count}</TableCell>
                 <TableCell>
                   <Button onClick={() => handleOpenModal(guest)}>Edit</Button>
                   <Button
