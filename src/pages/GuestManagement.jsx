@@ -158,7 +158,7 @@ Berikut link undangan kami, untuk info lengkap dari acara bisa kunjungi:
 ${guest.invitation_link}
 
 Link Maps:
-https://maps.app.goo.gl/1Dp2T1z38gyVYK5LA
+https://maps.app.goo.gl/qQkA17e79WHa6wQM8
 
 Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan untuk hadir dan memberikan doa restu.
 
@@ -192,7 +192,7 @@ Berikut link undangan kami, untuk info lengkap dari acara bisa kunjungi:
 ${guest.invitation_link}
 
 Link Maps:
-https://maps.app.goo.gl/1Dp2T1z38gyVYK5LA
+https://maps.app.goo.gl/qQkA17e79WHa6wQM8
 
 Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan untuk hadir dan memberikan doa restu.
 
@@ -205,8 +205,8 @@ _Untuk tampilan terbaik, silahkan akses melalui Browser Chrome / Safari dan non-
 Terima kasih banyak atas perhatiannya.
 
 Kami yang berbahagia,
-*Kel. Bpk Dharma & Ibu Cici*
-*Kel. Bpk M. Nur & Ibu Destie*`;
+*Kel. Bpk --- & Ibu ---*
+*Kel. Bpk --- & Ibu ---*`;
   };
 
   const copyInvitation = async (guest) => {
