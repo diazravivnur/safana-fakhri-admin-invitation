@@ -151,7 +151,7 @@ Di Tempat
 
 Dengan memohon Rahmat Allah SWT dan tanpa mengurangi rasa hormat, perkenankan kami mengundang Bapak/Ibu/Saudara/i, untuk menghadiri acara Pernikahan Kami:
 
-*Wulan Asri Septia & Diaz Raviv Nur*
+*Safana Salsabila W & M. Fakhri Dwi Ariza*
 
 Berikut link undangan kami, untuk info lengkap dari acara bisa kunjungi:
 
@@ -171,7 +171,7 @@ _Untuk tampilan terbaik, silahkan akses melalui Browser Chrome / Safari dan non-
 Terima kasih banyak atas perhatiannya.
 
 Kami yang berbahagia,
-*Wulan & Diaz*`;
+*Safana & Fakhri*`;
   };
 
   const generateInvitationMessageOrtu = (guest) => {
@@ -185,7 +185,7 @@ Di Tempat
 
 Dengan memohon Rahmat Allah SWT dan tanpa mengurangi rasa hormat, perkenankan kami mengundang Bapak/Ibu/Saudara/i, untuk menghadiri acara Pernikahan Anak Kami:
 
-*Wulan Asri Septia & Diaz Raviv Nur*
+*Safana Salsabila W & M. Fakhri Dwi Ariza*
 
 Berikut link undangan kami, untuk info lengkap dari acara bisa kunjungi:
 
@@ -297,8 +297,8 @@ Kami yang berbahagia,
           sx={{ minWidth: 130 }}
         >
           <MenuItem value="">All</MenuItem>
-          <MenuItem value="diaz">Diaz</MenuItem>
-          <MenuItem value="wulan">Wulan</MenuItem>
+          <MenuItem value="Fakhri">Fakhri</MenuItem>
+          <MenuItem value="Safana">Safana</MenuItem>
         </TextField>
 
         {/* Name Filter */}
@@ -386,8 +386,8 @@ Kami yang berbahagia,
               label="Asal Undangan"
               onChange={(e) => setOrigin(e.target.value)}
             >
-              <MenuItem value="diaz">Diaz</MenuItem>
-              <MenuItem value="wulan">Wulan</MenuItem>
+              <MenuItem value="Fakhri">Fakhri</MenuItem>
+              <MenuItem value="Safana">Safana</MenuItem>
             </Select>
           </FormControl>
 
@@ -422,8 +422,8 @@ Kami yang berbahagia,
               label="Asal Undangan"
               onChange={(e) => setOrigin(e.target.value)}
             >
-              <MenuItem value="diaz">Diaz</MenuItem>
-              <MenuItem value="wulan">Wulan</MenuItem>
+              <MenuItem value="Fakhri">Fakhri</MenuItem>
+              <MenuItem value="Safana">Safana</MenuItem>
             </Select>
           </FormControl>
 
@@ -460,9 +460,9 @@ Kami yang berbahagia,
           {filteredGuests.map((guest, index) => {
             const bgColor = guest.has_shared_invitation
               ? "white"
-              : guest.origin === "diaz"
+              : guest.origin === "Fakhri"
               ? "#E3F2FD"
-              : guest.origin === "wulan"
+              : guest.origin === "Safana"
               ? "#FCE4EC"
               : "white";
 
