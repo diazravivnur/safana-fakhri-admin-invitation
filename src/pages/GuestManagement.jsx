@@ -141,37 +141,41 @@ export default function GuestManagement() {
   };
 
   const generateInvitationMessage = (guest) => {
-    return `Bismillahirrahmanirrahim
-Assalamu’alaikum Warahmatullahi Wabarakatuh
+    return `Assalamualaikum Wr. Wb.
 
-Kepada Yth.
+Kepada Yth. 
 Bapak/Ibu/Saudara/i
 *${guest.guest_name}*
-Di Tempat
+di tempat
 
-Dengan memohon Rahmat Allah SWT dan tanpa mengurangi rasa hormat, perkenankan kami mengundang Bapak/Ibu/Saudara/i, untuk menghadiri acara Pernikahan Kami:
+Tanpa mengurangi rasa hormat, perkenankan kami mengundang Bapak/Ibu/Saudara/i untuk menghadiri acara Pernikahan kami:
 
-*Safana Salsabila W & M. Fakhri Dwi Ariza*
+*Safana Salsabila Wicaksono*
+Putri kelima Bpk. Sonny Wicaksono & Ibu Krissantiana
 
-Berikut link undangan kami, untuk info lengkap dari acara bisa kunjungi:
+dengan
 
+*Muhammad Fakhri Dwi Ariza*
+Putra Kedua dari Alm. Bpk. Muhammad Janiarto Arie Koesoemo & Ibu Siti Zaleha
+
+Yang Insya Allah akan dilaksanakan pada:
+🗓️ Minggu, 31 Agustus 2025
+🕰️ Akad: 07.30 - 09.30 WIB
+🕰️ Resepsi: 10.30 - 13.00 WIB
+📍 Graha Bhima Sakti, Pancoran, Jakarta Selatan
+
+Undangan Digital dapat dilihat pada:
 ${guest.invitation_link}
 
-Link Maps:
-https://maps.app.goo.gl/qQkA17e79WHa6wQM8
+Merupakan suatu kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan untuk hadir dan memberikan doa restu.
 
-Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan untuk hadir dan memberikan doa restu.
-
-Mohon maaf perihal undangan hanya di bagikan melalui pesan ini.
-
-_Note:_
-_Jika link tidak bisa dibuka, silahkan copy link kemudian paste di Chrome atau Browser lainnya._
-_Untuk tampilan terbaik, silahkan akses melalui Browser Chrome / Safari dan non-aktifkan Dark Mode / Mode Gelap._
-
-Terima kasih banyak atas perhatiannya.
+Demikian kami sampaikan, terima kasih.
+Wassalamualaikum Warahmatullahi Wabarakaatuh.
 
 Kami yang berbahagia,
-*Safana & Fakhri*`;
+*Safana & Fakhri*
+
+Mohon maaf perihal undangan hanya dibagikan melalui pesan ini.`;
   };
 
   const generateInvitationMessageOrtu = (guest) => {
@@ -181,32 +185,39 @@ Assalamu’alaikum Warahmatullahi Wabarakatuh
 Kepada Yth.
 Bapak/Ibu/Saudara/i
 *${guest.guest_name}*
-Di Tempat
+di tempat
 
-Dengan memohon Rahmat Allah SWT dan tanpa mengurangi rasa hormat, perkenankan kami mengundang Bapak/Ibu/Saudara/i, untuk menghadiri acara Pernikahan Anak Kami:
+Dengan penuh rasa hormat dan kebahagiaan, kami bermaksud mengundang Bapak/Ibu/Saudara/i untuk menghadiri acara Pernikahan Anak Kami:
 
-*Safana Salsabila W & M. Fakhri Dwi Ariza*
+*Safana Salsabila Wicaksono*
+Putri kelima Bpk. Sonny Wicaksono & Ibu Krissantiana
 
-Berikut link undangan kami, untuk info lengkap dari acara bisa kunjungi:
+dengan
 
+*Muhammad Fakhri Dwi Ariza*
+Putra kedua dari Alm. Bpk. Muhammad Janiarto Arie Koesoemo & Ibu Siti Zaleha
+
+Yang Insya Allah akan dilaksanakan pada:
+🗓️ Minggu, 31 Agustus 2025
+🕰️ Akad: 07.30 – 09.30 WIB
+🕰️ Resepsi: 10.30 – 13.00 WIB
+📍 Graha Bhima Sakti, Pancoran, Jakarta Selatan
+
+Undangan Digital dapat dilihat pada:
 ${guest.invitation_link}
 
-Link Maps:
-https://maps.app.goo.gl/qQkA17e79WHa6wQM8
+Merupakan kebahagiaan serta kehormatan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.
 
-Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan untuk hadir dan memberikan doa restu.
+🙏 Catatan khusus: Untuk GrabSquad, mohon maaf karena keterbatasan kapasitas, undangan ini hanya berlaku sesuai slot yang telah ditentukan. Terima kasih atas pengertian dan perhatiannya.
 
-Mohon maaf perihal undangan hanya di bagikan melalui pesan ini.
-
-_Note:_
-_Jika link tidak bisa dibuka, silahkan copy link kemudian paste di Chrome atau Browser lainnya._
-_Untuk tampilan terbaik, silahkan akses melalui Browser Chrome / Safari dan non-aktifkan Dark Mode / Mode Gelap._
-
-Terima kasih banyak atas perhatiannya.
+Terima kasih banyak atas perhatian Bapak/Ibu/Saudara/i.
+Wassalamu’alaikum Warahmatullahi Wabarakatuh.
 
 Kami yang berbahagia,
-*Kel. Bpk --- & Ibu ---*
-*Kel. Bpk --- & Ibu ---*`;
+*Kel. Bpk. Sonny Wicaksono & Ibu Krissantiana*
+*Kel. Alm. Bpk. Muhammad Janiarto Arie Koesoemo & Ibu Siti Zaleha*
+
+Mohon maaf perihal undangan hanya dibagikan melalui pesan ini.`;
   };
 
   const copyInvitation = async (guest) => {
@@ -494,7 +505,7 @@ Kami yang berbahagia,
                     onClick={() => copyInvitationOrtu(guest)}
                     sx={{ mt: 1 }}
                   >
-                    Copy Message ( Ortu )
+                    Copy Message ( GrabSquad )
                   </Button>
                 </TableCell>
                 <TableCell>{guest.group_name}</TableCell>
